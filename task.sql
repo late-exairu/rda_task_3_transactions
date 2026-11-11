@@ -1,11 +1,21 @@
 -- Use our database
 USE ShopDB; 
 
--- Some data should be created outside the transaction (here)
+SET @orderId  = 1;
+SET @customerId = 1;
+SET @orderDate  = '2023-01-01';
+SET @productId  = 1;
+SET @itemCount  = 1;
 
 -- Start the transaction 
 START TRANSACTION; 
+INSERT INTO Orders (CustomerID, Date)
+VALUES (@customerId, @orderDate);
 
--- And some data should be created inside the transaction 
+INSERT INTO OrderItems (OrderID, ProductID, Count)
+VALUES (orderId, @productId, @itemCount);
 
-COMMIT; 
+UPDATE Products
+SET WarehouseAmount = WarehouseAmount - @itemCount
+WHERE ID = @productId;
+COMMIT;
