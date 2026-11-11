@@ -13,7 +13,7 @@ INSERT INTO Orders (CustomerID, Date)
 VALUES (@customerId, @orderDate);
 
 INSERT INTO OrderItems (OrderID, ProductID, Count)
-VALUES (orderId, @productId, @itemCount);
+VALUES (@orderId, @productId, @itemCount);
 
 UPDATE Products
 SET WarehouseAmount = WarehouseAmount - @itemCount
