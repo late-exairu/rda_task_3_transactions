@@ -1,22 +1,21 @@
--- Use our database
 USE ShopDB;
 
-SET @customerId = 1;
-SET @orderDate  = '2023-01-01';
-SET @productId  = 1;
-SET @itemCount  = 1;
+-- Create the order outside the transaction
+INSERT INTO Orders (CustomerID, Date)
+VALUES (1, '2023-01-01');
 
--- Start the transaction
+-- Values used inside the transaction
+SET @orderId   = LAST_INSERT_ID();
+SET @productId = 1;
+SET @itemCount = 1;
+
 START TRANSACTION;
 
-INSERT INTO Orders (CustomerID, Date)
-VALUES (@customerId, @orderDate);
-
-SET @orderId = LAST_INSERT_ID();
-
+-- Add the order item
 INSERT INTO OrderItems (OrderID, ProductID, Count)
 VALUES (@orderId, @productId, @itemCount);
 
+-- Decrease the warehouse stock
 UPDATE Products
 SET WarehouseAmount = WarehouseAmount - @itemCount
 WHERE ID = @productId;
